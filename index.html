@@ -10,6 +10,13 @@ body {
   background: #fff5f7;
   font-family: 'Courier New', monospace;
   overflow: hidden;
+  transition: 0.5s;
+}
+
+/* DARK MODE */
+.dark {
+  background: #1a1a1a;
+  color: white;
 }
 
 /* Floating hearts */
@@ -17,7 +24,6 @@ body {
   position: absolute;
   color: #ff6b81;
   animation: float linear infinite;
-  will-change: transform;
 }
 
 @keyframes float {
@@ -25,28 +31,22 @@ body {
   to { transform: translate3d(0,-10vh,0); opacity: 0; }
 }
 
-/* Center container */
+/* Container */
 .container {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  text-align: center;
 }
 
-/* Window style */
+/* Window */
 .window {
   background: #ffe4e9;
   border: 4px solid #ff8fa3;
   padding: 20px;
   width: 300px;
+  text-align: center;
   box-shadow: 0 0 20px rgba(255, 143, 163, 0.5);
-  animation: pop 0.8s ease;
-}
-
-@keyframes pop {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
 }
 
 /* Title */
@@ -58,62 +58,29 @@ h1 {
 button {
   background: #ff8fa3;
   border: none;
-  padding: 10px 20px;
-  margin-top: 10px;
+  padding: 10px;
+  margin: 5px;
   cursor: pointer;
   color: white;
-  font-weight: bold;
   border-radius: 5px;
-  transition: 0.3s;
 }
 
 button:hover {
   background: #ff4d6d;
-  transform: scale(1.05);
 }
 
-/* Letter */
-.letter {
-  display: none;
-  margin-top: 15px;
-  font-size: 14px;
-  color: #333;
-  animation: fadeIn 1s ease forwards;
-}
-
-/* Gallery */
-.gallery {
-  display: none;
-  margin-top: 15px;
-  animation: fadeIn 1s ease forwards;
-}
-
-.gallery img {
-  width: 100%;
-  border-radius: 10px;
-}
-
-/* First meet */
-.memory {
+/* Sections */
+.letter, .memory, .gallery, .loveBox {
   display: none;
   margin-top: 10px;
-  font-size: 13px;
-  color: #444;
-  animation: fadeIn 1s ease forwards;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Typing text */
+/* Typing */
 .typing {
   border-right: 2px solid #ff4d6d;
   white-space: nowrap;
   overflow: hidden;
-  animation: typing 4s steps(40), blink .5s infinite;
+  animation: typing 3s steps(30), blink .5s infinite;
 }
 
 @keyframes typing {
@@ -124,43 +91,53 @@ button:hover {
 @keyframes blink {
   50% { border-color: transparent }
 }
+
+/* Confetti */
+.confetti {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: red;
+  top: 0;
+  animation: fall 3s linear forwards;
+}
+
+@keyframes fall {
+  to { transform: translateY(100vh) rotate(360deg); }
+}
 </style>
 </head>
 
 <body>
+
+<!-- MUSIC -->
+<audio id="music" autoplay loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+</audio>
 
 <div class="container">
   <div class="window">
 
     <h1 class="typing">Happy Birthday 💖</h1>
 
-    <p>Will you open this letter? 💌</p>
+    <p id="countdown"></p>
 
-    <button onclick="openLetter()">Open</button>
+    <button onclick="openLetter()">Open 💌</button>
+    <button onclick="toggleMusic()">🎵</button>
+    <button onclick="toggleDark()">🌙</button>
 
     <!-- LETTER -->
     <div class="letter" id="letter">
-      <p>
-        Happy Birthday my love ❤️<br><br>
-        Now you're 19 😌<br><br>
-        You are mine. Always. 💖<br><br>
-        From the moment we first met,<br>
-        my life changed forever ✨<br><br>
-        Every moment with you feels magical 🌸<br><br>
-        I love you forever 💕
-      </p>
+      <p id="typedMessage"></p>
 
-      <button onclick="showMemory()">Our First Meet 💫</button>
+      <button onclick="showMemory()">First Meet 💫</button>
       <button onclick="showGallery()">Memories 📸</button>
+      <button onclick="showLove()">Why I Love You 💖</button>
     </div>
 
-    <!-- FIRST MEET -->
+    <!-- MEMORY -->
     <div class="memory" id="memory">
-      <p>
-        The first time we met... ❤️<br>
-        I didn’t know you would become my whole world 🌍<br>
-        That moment is still my favorite memory 💫
-      </p>
+      <p>That day... changed everything ❤️</p>
     </div>
 
     <!-- GALLERY -->
@@ -168,53 +145,117 @@ button:hover {
       <img id="slide" src="https://picsum.photos/300/200?1">
     </div>
 
+    <!-- LOVE GENERATOR -->
+    <div class="loveBox" id="loveBox">
+      <p id="loveText"></p>
+      <button onclick="nextLove()">Next 💕</button>
+    </div>
+
   </div>
 </div>
 
 <script>
-// INP optimized heart creation
-requestAnimationFrame(() => {
-  const frag = document.createDocumentFragment();
-  for (let i = 0; i < 40; i++) {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "❤";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.animationDuration = (4 + Math.random() * 4) + "s";
-    heart.style.fontSize = (10 + Math.random() * 20) + "px";
-    frag.appendChild(heart);
-  }
-  document.body.appendChild(frag);
-});
-
-// Open letter
-function openLetter(){
-  document.getElementById("letter").style.display="block";
+// HEARTS
+for (let i = 0; i < 30; i++) {
+  let h = document.createElement("div");
+  h.className = "heart";
+  h.innerHTML = "❤";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.animationDuration = (4 + Math.random() * 3) + "s";
+  document.body.appendChild(h);
 }
 
-// Show memory
+// CONFETTI
+function confetti() {
+  for (let i = 0; i < 50; i++) {
+    let c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background = `hsl(${Math.random()*360},100%,50%)`;
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 3000);
+  }
+}
+
+// LETTER OPEN
+function openLetter(){
+  document.getElementById("letter").style.display="block";
+  confetti();
+  typeMessage();
+}
+
+// TYPING MESSAGE
+const msg = "Happy Birthday my love ❤️ You are my happiness, my peace, my everything 💖";
+let i = 0;
+function typeMessage(){
+  let el = document.getElementById("typedMessage");
+  let interval = setInterval(()=>{
+    el.innerHTML += msg[i];
+    i++;
+    if(i>=msg.length) clearInterval(interval);
+  },50);
+}
+
+// MEMORY
 function showMemory(){
   document.getElementById("memory").style.display="block";
 }
 
-// Gallery slideshow
+// GALLERY
 const images = [
   "https://picsum.photos/300/200?1",
   "https://picsum.photos/300/200?2",
   "https://picsum.photos/300/200?3"
 ];
-
 let index = 0;
 
 function showGallery(){
-  const gallery = document.getElementById("gallery");
-  gallery.style.display="block";
-
-  setInterval(() => {
-    index = (index + 1) % images.length;
-    document.getElementById("slide").src = images[index];
-  }, 2000);
+  let g = document.getElementById("gallery");
+  g.style.display="block";
+  setInterval(()=>{
+    index=(index+1)%images.length;
+    document.getElementById("slide").src=images[index];
+  },2000);
 }
+
+// LOVE REASONS
+const reasons = [
+  "Your smile 😍",
+  "Your voice 🎶",
+  "Your kindness 💖",
+  "Everything about you ✨"
+];
+
+function showLove(){
+  document.getElementById("loveBox").style.display="block";
+  nextLove();
+}
+
+function nextLove(){
+  let r = reasons[Math.floor(Math.random()*reasons.length)];
+  document.getElementById("loveText").innerText = r;
+}
+
+// MUSIC
+function toggleMusic(){
+  let m = document.getElementById("music");
+  m.paused ? m.play() : m.pause();
+}
+
+// DARK MODE
+function toggleDark(){
+  document.body.classList.toggle("dark");
+}
+
+// COUNTDOWN (next birthday)
+const target = new Date(new Date().getFullYear()+1,0,1);
+setInterval(()=>{
+  let now = new Date();
+  let diff = target - now;
+  let d = Math.floor(diff/1000/60/60/24);
+  document.getElementById("countdown").innerText =
+    "Next birthday in " + d + " days 🎂";
+},1000);
 </script>
 
 </body>

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Happy Birthday ❤️</title>
+
 <style>
 body {
   margin: 0;
@@ -15,12 +16,13 @@ body {
 .heart {
   position: absolute;
   color: #ff6b81;
-  animation: float 6s linear infinite;
+  animation: float linear infinite;
+  will-change: transform;
 }
 
 @keyframes float {
-  0% { transform: translateY(100vh); opacity: 1; }
-  100% { transform: translateY(-10vh); opacity: 0; }
+  from { transform: translate3d(0,100vh,0); opacity: 1; }
+  to { transform: translate3d(0,-10vh,0); opacity: 0; }
 }
 
 /* Center container */
@@ -39,6 +41,12 @@ body {
   padding: 20px;
   width: 300px;
   box-shadow: 0 0 20px rgba(255, 143, 163, 0.5);
+  animation: pop 0.8s ease;
+}
+
+@keyframes pop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 /* Title */
@@ -61,6 +69,7 @@ button {
 
 button:hover {
   background: #ff4d6d;
+  transform: scale(1.05);
 }
 
 /* Letter */
@@ -69,6 +78,34 @@ button:hover {
   margin-top: 15px;
   font-size: 14px;
   color: #333;
+  animation: fadeIn 1s ease forwards;
+}
+
+/* Gallery */
+.gallery {
+  display: none;
+  margin-top: 15px;
+  animation: fadeIn 1s ease forwards;
+}
+
+.gallery img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* First meet */
+.memory {
+  display: none;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #444;
+  animation: fadeIn 1s ease forwards;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Typing text */
@@ -92,43 +129,91 @@ button:hover {
 
 <body>
 
-<!-- Floating Hearts -->
-<script>
-for(let i=0;i<50;i++){
-  let heart = document.createElement("div");
-  heart.className="heart";
-  heart.innerHTML="❤";
-  heart.style.left=Math.random()*100+"vw";
-  heart.style.animationDuration=(3+Math.random()*3)+"s";
-  heart.style.fontSize=(10+Math.random()*20)+"px";
-  document.body.appendChild(heart);
-}
-</script>
-
 <div class="container">
   <div class="window">
+
     <h1 class="typing">Happy Birthday 💖</h1>
 
     <p>Will you open this letter? 💌</p>
 
     <button onclick="openLetter()">Open</button>
 
+    <!-- LETTER -->
     <div class="letter" id="letter">
       <p>
         Happy Birthday my love ❤️<br><br>
-        You are the most beautiful part of my life.<br>
-        Every moment with you feels magical ✨<br><br>
-        I hope today brings you endless smiles 😊<br>
-        and all the happiness you deserve 💕<br><br>
-        I love you forever 💖
+        Now you're 19 😌<br><br>
+        You are mine. Always. 💖<br><br>
+        From the moment we first met,<br>
+        my life changed forever ✨<br><br>
+        Every moment with you feels magical 🌸<br><br>
+        I love you forever 💕
+      </p>
+
+      <button onclick="showMemory()">Our First Meet 💫</button>
+      <button onclick="showGallery()">Memories 📸</button>
+    </div>
+
+    <!-- FIRST MEET -->
+    <div class="memory" id="memory">
+      <p>
+        The first time we met... ❤️<br>
+        I didn’t know you would become my whole world 🌍<br>
+        That moment is still my favorite memory 💫
       </p>
     </div>
+
+    <!-- GALLERY -->
+    <div class="gallery" id="gallery">
+      <img id="slide" src="https://picsum.photos/300/200?1">
+    </div>
+
   </div>
 </div>
 
 <script>
+// INP optimized heart creation
+requestAnimationFrame(() => {
+  const frag = document.createDocumentFragment();
+  for (let i = 0; i < 40; i++) {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+    heart.style.fontSize = (10 + Math.random() * 20) + "px";
+    frag.appendChild(heart);
+  }
+  document.body.appendChild(frag);
+});
+
+// Open letter
 function openLetter(){
   document.getElementById("letter").style.display="block";
+}
+
+// Show memory
+function showMemory(){
+  document.getElementById("memory").style.display="block";
+}
+
+// Gallery slideshow
+const images = [
+  "https://picsum.photos/300/200?1",
+  "https://picsum.photos/300/200?2",
+  "https://picsum.photos/300/200?3"
+];
+
+let index = 0;
+
+function showGallery(){
+  const gallery = document.getElementById("gallery");
+  gallery.style.display="block";
+
+  setInterval(() => {
+    index = (index + 1) % images.length;
+    document.getElementById("slide").src = images[index];
+  }, 2000);
 }
 </script>
 

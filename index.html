@@ -2,6 +2,7 @@
 <html lang="en">  
 <head>  
 <meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday ❤️</title>  
   
 <style>  
@@ -11,6 +12,7 @@ body {
   font-family: 'Courier New', monospace;  
   overflow: hidden;  
   transition: 0.5s;  
+  height: 100vh;
 }  
   
 .dark {  
@@ -31,39 +33,42 @@ body {
   align-items: center;
   flex-direction: column;
   z-index: 999;
-  transition: 1s;
+  transition: 1s ease-in-out;
 }
 
 .intro img {
   width: 120px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .intro img:hover {
-  transform: scale(1.1);
+  transform: scale(1.2) rotate(5deg);
 }
 
 .intro h2 {
-  margin-top: 10px;
+  margin-top: 20px;
   color: #ff4d6d;
+  letter-spacing: 2px;
 }
 
-/* Hide main at start */
+/* Main Content Visibility */
 .main {
   display: none;
+  opacity: 0;
+  transition: 1.5s;
 }
 
 .heart {  
   position: absolute;  
   color: #ff6b81;  
   animation: float linear infinite;  
-  opacity: 0.8;  
+  pointer-events: none;
 }  
   
 @keyframes float {  
-  from { transform: translate3d(0,100vh,0); opacity: 1; }  
-  to { transform: translate3d(0,-10vh,0); opacity: 0; }  
+  from { transform: translateY(110vh) scale(0.5); opacity: 1; }  
+  to { transform: translateY(-10vh) scale(1.2); opacity: 0; }  
 }  
   
 .container {  
@@ -71,62 +76,52 @@ body {
   top: 50%;  
   left: 50%;  
   transform: translate(-50%, -50%);  
+  z-index: 10;
 }  
   
 .window {  
   background: #ffe4e9;  
   border: 4px solid #ff8fa3;  
-  padding: 20px;  
-  width: 300px;  
+  padding: 30px;  
+  width: 320px;  
   text-align: center;  
-  box-shadow: 0 0 20px rgba(255, 143, 163, 0.5);  
-  border-radius: 12px;  
-  animation: fadeIn 1.5s ease;  
-}  
+  box-shadow: 0 10px 30px rgba(255, 143, 163, 0.3);  
+  border-radius: 20px;  
+  animation: windowFloat 4s ease-in-out infinite;  
+}
+
+.dark .window {
+    background: #2d2d2d;
+    border-color: #ff4d6d;
+}
   
+@keyframes windowFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
 @keyframes fadeIn {  
-  from {opacity:0; transform: translate(-50%, -60%);}  
-  to {opacity:1; transform: translate(-50%, -50%);}  
+  from { opacity: 0; transform: translateY(10px); }  
+  to { opacity: 1; transform: translateY(0); }  
 }  
   
 h1 {  
   color: #ff4d6d;  
-  animation: glow 2s infinite alternate;  
-}  
-  
-@keyframes glow {  
-  from { text-shadow: 0 0 5px #ff8fa3; }  
-  to { text-shadow: 0 0 15px #ff4d6d; }  
-}  
-  
-button {  
-  background: #ff8fa3;  
-  border: none;  
-  padding: 10px;  
-  margin: 5px;  
-  cursor: pointer;  
-  color: white;  
-  border-radius: 5px;  
-  transition: 0.3s;  
-}  
-  
-button:hover {  
-  background: #ff4d6d;  
-  transform: scale(1.05);  
-}  
-  
-.letter, .memory, .gallery, .loveBox {  
-  display: none;  
-  margin-top: 10px;  
-  animation: fadeIn 1s ease;  
+  font-size: 1.5rem;
+  margin-bottom: 15px;
 }  
   
 .typing {  
-  border-right: 2px solid #ff4d6d;  
+  display: inline-block;
+  border-right: 3px solid #ff4d6d;  
   white-space: nowrap;  
   overflow: hidden;  
-  animation: typing 3s steps(30), blink .5s infinite;  
-}  
+  width: 0;
+}
+
+.start-typing {
+  animation: typing 3s steps(20) forwards, blink .5s infinite;
+}
   
 @keyframes typing {  
   from { width: 0 }  
@@ -137,75 +132,113 @@ button:hover {
   50% { border-color: transparent }  
 }  
   
+button {  
+  background: #ff8fa3;  
+  border: none;  
+  padding: 10px 15px;  
+  margin: 8px 4px;  
+  cursor: pointer;  
+  color: white;  
+  border-radius: 8px;  
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  transition: 0.3s;  
+}  
+  
+button:hover {  
+  background: #ff4d6d;  
+  transform: translateY(-3px);  
+  box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+}  
+  
+.letter, .memory, .gallery, .loveBox {  
+  display: none;  
+  margin-top: 20px;  
+  animation: fadeIn 0.8s ease;  
+}  
+  
 .gallery img {  
-  border-radius: 10px;  
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 12px;  
+  border: 3px solid #ff8fa3;
 }  
   
 .confetti {  
   position: fixed;  
-  width: 8px;  
-  height: 8px;  
-  top: 0;  
+  width: 10px;  
+  height: 10px;  
+  top: -10px;  
+  z-index: 100;
   animation: fall 3s linear forwards;  
 }  
   
 @keyframes fall {  
-  to { transform: translateY(100vh) rotate(360deg); }  
+  to { transform: translateY(105vh) rotate(720deg); }  
 }  
   
 .quote {  
-  font-size: 12px;  
-  margin-top: 8px;  
+  font-size: 13px;  
+  margin-top: 10px;  
   color: #ff4d6d;  
-}  
+  font-style: italic;
+}
+
+#countdown {
+    font-weight: bold;
+    color: #ff4d6d;
+    font-size: 0.9rem;
+}
 </style>  
 </head>  
   
 <body>  
 
-<!-- 💌 INTRO SCREEN -->
 <div class="intro" id="intro">
-  <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" onclick="enterSite()">
-  <h2>♡ Letter For You ♡</h2>
+  <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" onclick="enterSite()" alt="Letter Icon">
+  <h2>Click to Open</h2>
 </div>
 
-<!-- MAIN CONTENT -->
 <div class="main" id="main">
 
-<audio id="music" autoplay loop>  
-  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3">  
+<audio id="music" loop>  
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">  
 </audio>  
   
 <div class="container">  
   <div class="window">  
   
-    <h1 class="typing">Happy Birthday 💖</h1>  
+    <h1 id="titleText" class="">Happy Birthday 💖</h1>  
   
     <p id="countdown"></p>  
-    <div class="quote" id="quote"></div>  
+    <div class="quote" id="quote">"You make every day feel like a dream."</div>  
   
-    <button onclick="openLetter()">Open 💌</button>  
-    <button onclick="toggleMusic()">🎵</button>  
-    <button onclick="toggleDark()">🌙</button>  
-  
+    <div style="margin-top: 15px;">
+        <button onclick="openLetter()">Open 💌</button>  
+        <button onclick="toggleMusic()">🎵</button>  
+        <button onclick="toggleDark()">🌙</button>  
+    </div>
+
     <div class="letter" id="letter">  
-      <p id="typedMessage"></p>  
+      <p id="typedMessage" style="line-height: 1.6;"></p>  
   
       <button onclick="showMemory()">First Meet 💫</button>  
       <button onclick="showGallery()">Memories 📸</button>  
-      <button onclick="showLove()">Why I Love You 💖</button>  
+      <button onclick="showLove()">Reasons 💖</button>  
     </div>  
   
     <div class="memory" id="memory">  
-      <p id="memoryText"></p>  
+      <p id="memoryText">It feels like just yesterday when I first saw you. That moment changed my life forever... ✨</p>  
     </div>  
   
     <div class="gallery" id="gallery">  
-      <img id="slide" src="https://picsum.photos/300/200?1">  
+      <img id="slide" src="https://picsum.photos/300/200?random=1" onclick="nextImg()">  
+      <p style="font-size: 10px; cursor: pointer;" onclick="nextImg()">Click photo to change ⮕</p>
     </div>  
   
     <div class="loveBox" id="loveBox">  
-      <p id="loveText"></p>  
+      <p id="loveText">I love you because you're mine. ❤️</p>  
       <button onclick="nextLove()">Next 💕</button>  
     </div>  
   
@@ -215,86 +248,151 @@ button:hover {
 </div>  
   
 <script>  
+// Elements
+const intro = document.getElementById("intro");
+const main = document.getElementById("main");
+const music = document.getElementById("music");
+const titleText = document.getElementById("titleText");
+const typedMessage = document.getElementById("typedMessage");
 
 // 💌 ENTER SITE
 function enterSite(){
-  document.getElementById("intro").style.opacity = "0";
-  setTimeout(()=>{
-    document.getElementById("intro").style.display="none";
-    document.getElementById("main").style.display="block";
-  },800);
+  intro.style.opacity = "0";
+  setTimeout(() => {
+    intro.style.display = "none";
+    main.style.display = "block";
+    setTimeout(() => { 
+        main.style.opacity = "1"; 
+        titleText.classList.add('typing', 'start-typing');
+        // Autoplay music after interaction
+        music.play().catch(e => console.log("Music blocked until further interaction"));
+    }, 100);
+  }, 1000);
+  startCountdown();
+}
+
+// Countdown Logic (Set to next year if birthday passed)
+function startCountdown() {
+    const birthday = new Date();
+    birthday.setMonth(11); // Example: December (Months are 0-indexed)
+    birthday.setDate(25);  // Example: 25th
+    
+    setInterval(() => {
+        const now = new Date();
+        let diff = birthday - now;
+        if (diff < 0) {
+            birthday.setFullYear(birthday.getFullYear() + 1);
+            diff = birthday - now;
+        }
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const mins = Math.floor((diff / 1000 / 60) % 60);
+        const secs = Math.floor((diff / 1000) % 60);
+        document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${mins}m ${secs}s until next big day!`;
+    }, 1000);
 }
 
 // Hide sections
 function hideAll(){
-  memory.style.display="none";
-  gallery.style.display="none";
-  loveBox.style.display="none";
+  document.getElementById("memory").style.display="none";
+  document.getElementById("gallery").style.display="none";
+  document.getElementById("loveBox").style.display="none";
 }
 
-// Hearts
-for (let i = 0; i < 40; i++) {  
-  let h = document.createElement("div");  
-  h.className = "heart";  
-  h.innerHTML = "❤";  
-  h.style.left = Math.random() * 100 + "vw";  
-  h.style.animationDuration = (4 + Math.random() * 4) + "s";  
-  document.body.appendChild(h);  
-}  
+// Hearts Generator
+function createHearts() {
+    for (let i = 0; i < 30; i++) {  
+      let h = document.createElement("div");  
+      h.className = "heart";  
+      h.innerHTML = "❤";  
+      h.style.left = Math.random() * 100 + "vw";  
+      h.style.fontSize = (Math.random() * 20 + 10) + "px";
+      h.style.animationDuration = (4 + Math.random() * 6) + "s";  
+      h.style.delay = (Math.random() * 5) + "s";
+      document.body.appendChild(h);  
+    }
+}
+createHearts();
 
 function openLetter(){
   hideAll();
-  letter.style.display="block";
+  document.getElementById("letter").style.display="block";
   confetti();
   typeMessage();
 }
 
 function confetti(){
-  for(let i=0;i<80;i++){
-    let c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*100+"vw";
-    c.style.background=`hsl(${Math.random()*360},100%,50%)`;
+  for(let i=0; i<60; i++){
+    let c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
+    c.style.animationDuration = (Math.random() * 2 + 1) + "s";
     document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3000);
+    setTimeout(() => c.remove(), 3000);
   }
 }
 
-const msg="Happy Birthday my love ❤️\nYou are my happiness...";
-let i=0;
+const msg = "To my favorite person,\nHappy Birthday! Every moment with you is a gift. You make my world so much brighter just by being in it. ❤️";
+let charIndex = 0;
 
 function typeMessage(){
-  typedMessage.innerHTML="";
-  i=0;
-  let t=setInterval(()=>{
-    typedMessage.innerHTML+=msg[i]=="\n"?"<br>":msg[i];
-    i++;
-    if(i>=msg.length) clearInterval(t);
-  },40);
+  if(charIndex === 0) {
+    typedMessage.innerHTML = "";
+    let t = setInterval(() => {
+        if(charIndex < msg.length) {
+            typedMessage.innerHTML += msg[charIndex] === "\n" ? "<br>" : msg[charIndex];
+            charIndex++;
+        } else {
+            clearInterval(t);
+        }
+    }, 50);
+  }
 }
 
 function showMemory(){
   hideAll();
-  memory.style.display="block";
+  document.getElementById("memory").style.display="block";
 }
 
 function showGallery(){
   hideAll();
-  gallery.style.display="block";
+  document.getElementById("gallery").style.display="block";
+}
+
+let imgCount = 1;
+function nextImg() {
+    imgCount++;
+    document.getElementById("slide").src = `https://picsum.photos/300/200?random=${imgCount}`;
 }
 
 function showLove(){
   hideAll();
-  loveBox.style.display="block";
+  document.getElementById("loveBox").style.display="block";
 }
 
 function nextLove(){
-  const r=["Your smile 😍","Your voice 🎶","Everything ❤️"];
-  loveText.innerText=r[Math.floor(Math.random()*r.length)];
+  const reasons = [
+      "Your laugh is my favorite song 🎶",
+      "The way you make me feel safe 🛡️",
+      "Your kindness to everyone 🌸",
+      "The way your eyes sparkle ✨",
+      "Because you are my best friend 🫂"
+  ];
+  const loveText = document.getElementById("loveText");
+  loveText.style.opacity = 0;
+  setTimeout(() => {
+    loveText.innerText = reasons[Math.floor(Math.random() * reasons.length)];
+    loveText.style.opacity = 1;
+  }, 300);
 }
 
 function toggleMusic(){
-  music.paused?music.play():music.pause();
+  if (music.paused) {
+    music.play();
+  } else {
+    music.pause();
+  }
 }
 
 function toggleDark(){
